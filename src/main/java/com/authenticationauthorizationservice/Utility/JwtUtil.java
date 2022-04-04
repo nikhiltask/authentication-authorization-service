@@ -4,9 +4,10 @@ import java.util.Date;
 
 import com.authenticationauthorizationservice.exception.JwtTokenMalformedException;
 import com.authenticationauthorizationservice.exception.JwtTokenMissingException;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -24,14 +25,14 @@ public class JwtUtil {
 
     @Value("${jwt.token.validity}")
     private long tokenValidity;
-
+    @Autowired
+    Logger logger;
     public Claims getClaims(final String token) {
         try {
             Claims body = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-            System.out.println(jwtSecret);
             return body;
         } catch (Exception e) {
-            System.out.println(e.getMessage() + " => " + e);
+            logger.info(String.format("%s => %s",e.getMessage() , e));
         }
         return null;
     }
@@ -41,7 +42,6 @@ public class JwtUtil {
         long nowMillis = System.currentTimeMillis();
         long expMillis = nowMillis + tokenValidity;
         Date exp = new Date(expMillis);
-        System.out.println("hi "+jwtSecret);
         return Jwts.builder().setClaims(claims).setIssuedAt(new Date(nowMillis)).setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }

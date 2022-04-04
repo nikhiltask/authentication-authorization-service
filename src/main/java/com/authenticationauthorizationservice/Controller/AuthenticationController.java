@@ -28,9 +28,6 @@ public class AuthenticationController {
 
     @PostMapping("/auth/signup")
     public ResponseEntity<UserWithOutPassword> signup(@RequestBody UserDto userDto) {
-        // Persist user to some persistent storage
-//        System.out.println("Info saved...");
-
         return new ResponseEntity<>(serviceAuthentication.signup(userDto), HttpStatus.OK);
     }
 }

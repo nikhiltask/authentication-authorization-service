@@ -22,26 +22,25 @@ public class ServiceAuthentication {
     private UserFeign userFeign;
 
 
-    public String login(JWTRequest jwtRequest) {
-        JWTRequest jwtReq = authorisationRepository.findByemail(jwtRequest.getEmail());
-        if (jwtReq.getPassword().equals(jwtRequest.getPassword())){
-            String token = jwtUtil.generateToken(jwtRequest.getEmail());
-            return token;
-        }else {
-            return "Invalid Email Address";
+    public String login(JWTRequest jwtRequest) throws Exception {
+        try {
+            JWTRequest jwtReq = authorisationRepository.findByemail(jwtRequest.getEmail());
+            if (jwtReq.getPassword().equals(jwtRequest.getPassword())) {
+                String token = jwtUtil.generateToken(jwtRequest.getEmail());
+                return token;
+            } else {
+                return "Invalid Email Address";
+            }
+        } catch (Exception e) {
+            throw new Exception(e);
         }
     }
-    public UserWithOutPassword signup(UserDto userDto){
-        JWTRequest jwtRequest =new JWTRequest(userDto.getEmail(),userDto.getPassword());
+
+    public UserWithOutPassword signup(UserDto userDto) {
+        JWTRequest jwtRequest = new JWTRequest(userDto.getEmail(), userDto.getPassword());
         authorisationRepository.save(jwtRequest);
-        UserWithOutPassword userWithOutPassword1=userFeign.createUser(userDto);
-//
-//    UserWithOutPassword userWithOutPassword= new UserWithOutPassword(userDto.getUserID(),userDto.getFirstName(),userDto.getMiddleName(),
-//            userDto.getLastName(),userDto.getPhoneNumber(),userDto.getDateOfBirth(),userDto.getGender(),userDto.getAddress(),
-//            userDto.getEmployeeNumber(),userDto.getBloodGroup(),userDto.getEmail());
-
-        return  userWithOutPassword1;
-
+        userFeign.createUser(userDto);
+        return userFeign.createUser(userDto);
 
 
     }
