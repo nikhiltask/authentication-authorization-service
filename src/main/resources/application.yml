@@ -14,3 +14,9 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   application:
     name: authentication-authorization-service
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${eureka_url:http://localhost:8761/eureka}
