@@ -17,5 +17,8 @@ public class JWTRequest {
     private Integer id;
     private String email;
     private String password;
-
+    public JWTRequest(String email, String password) {
+        this.email=email;
+        this.password=password;
+    }
 }

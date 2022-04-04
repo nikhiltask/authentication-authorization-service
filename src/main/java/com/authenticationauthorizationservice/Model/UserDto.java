@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 
 public class UserDto {
-    @Id
+
     private String userID;
 
     @NotEmpty(message = "First name is required")
